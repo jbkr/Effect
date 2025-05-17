@@ -14,6 +14,11 @@ public class UIManager : MonoSingleton<UIManager>
 
     private string _uiPath = "Prefab/";
 
+    private void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     private void Awake()
     {
         if (_canvasTrasn == null)

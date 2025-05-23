@@ -6,31 +6,30 @@ using UnityEngine.UI;
 
 public class UIBase : MonoBehaviour { }
 
-public class UIManager : MonoSingleton<UIManager>
+public class UIManager : MonoBehaviour
 {
+    [SerializeField]
     private Transform _canvasTrasn;
 
     private Dictionary<string, UIBase> _container = new Dictionary<string, UIBase>();
 
     private string _uiPath = "Prefab/";
 
-    private void Start()
+    public static UIManager Instance
     {
-        DontDestroyOnLoad(gameObject);
+        get
+        {
+            return _instance;
+        }
     }
 
-    private void Awake()
+    private static UIManager _instance;
+
+    public static void Initialize()
     {
-        if (_canvasTrasn == null)
-        {
-            gameObject.AddComponent<Canvas>();
-            gameObject.AddComponent<CanvasScaler>();
-            _canvasTrasn = gameObject.transform;
-        }
-        else
-        {
-            _canvasTrasn = transform;
-        }
+        UIManager res = Resources.Load<UIManager>("Prefab/UIManager");
+        _instance = Instantiate(res);
+        DontDestroyOnLoad(_instance.gameObject);
     }
 
     public void CreateUI<T>() where T : UIBase
@@ -51,6 +50,10 @@ public class UIManager : MonoSingleton<UIManager>
         {
             Destroy(uiBase.gameObject);
             _container.Remove(typeof(T).ToString());
+        }
+        else
+        {
+            Debug.Log("failed remove");
         }
     }
 

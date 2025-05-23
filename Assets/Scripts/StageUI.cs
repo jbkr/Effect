@@ -1,16 +1,26 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StageUI : UIBase
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField]
+    private Button stage1Button;
+
+    [SerializeField]
+    private Button stage2Button;
+
+    [SerializeField]
+    private Button stage3Button;
+
+    [SerializeField]
+    private Button stage4Button;
+
     void Start()
     {
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        if (stage1Button != null)
+        {
+            stage1Button.onClick.AddListener(GameManager.Instance.OnClickStage1Button);
+        }
     }
 }

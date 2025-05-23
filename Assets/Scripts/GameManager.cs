@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,32 +8,41 @@ using UnityEngine.SocialPlatforms.Impl;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-
-    [SerializeField]
-    private Transform _canvasTrasn;
+    //[SerializeField]
+    //private Transform _canvasTrasn;
 
     public bool _isPlay = false;
 
+    private Action _sceneLoadComplete;
+
     void Start()
     {
-        var temp = Instance;
 
-        UIManager.Instance.CreateUI<StartUI>();
-        DontDestroyOnLoad(gameObject);
     }
 
     public void OnClickStartButton()
     {
-        UIManager.Instance.RemoveUI<StartUI>();
+        _sceneLoadComplete = OnLobbyLoadComplete;
+        LoadScene("LobbyScene");
+    }
 
-        StartCoroutine(LoadSceneAsync("LobbyScene"));
+    private void OnLobbyLoadComplete()
+    {
+        UIManager.Instance.RemoveUI<StartUI>();
+        UIManager.Instance.CreateUI<StageUI>();
+    }
+
+    public void LoadScene(string sceneName)
+    {
+        StartCoroutine(LoadSceneAsync(sceneName));
     }
 
     private IEnumerator LoadSceneAsync(string sceneName)
     {
         yield return SceneManager.LoadSceneAsync(sceneName);
+        _sceneLoadComplete?.Invoke();
 
-        UIManager.Instance.CreateUI<StageUI>();
+
 
         // �÷��̾� �������ָ� �� 
         //GameObject resGO = Resources.Load<GameObject>("Prefab/PangPlayer");
@@ -51,6 +61,28 @@ public class GameManager : MonoSingleton<GameManager>
         //Transform tr = realGO.transform;
 
         //UIManager.Instance.CreateUI<ScoreUI>();
+    }
+
+    public void OnClickStage1Button()
+    {
+        _sceneLoadComplete = OnGameLoadComplete;
+        LoadScene("GameScene");
+    }
+
+    private void OnGameLoadComplete()
+    {
+        UIManager.Instance.RemoveUI<StageUI>();
+        UIManager.Instance.CreateUI<FightUI>();
+
+        GameObject playerRes = Resources.Load<GameObject>("Prefab/Player");
+        GameObject playerGO = Instantiate(playerRes);
+        playerGO.transform.position = new Vector3(-2, 0, -1.0f);
+        //_isPlay = true;
+
+        GameObject opponentRes = Resources.Load<GameObject>("Prefab/Opponent");
+        GameObject opponentGO = Instantiate(opponentRes);
+        opponentGO.transform.position = new Vector3(2, 0, -1.0f);
+
     }
 
     public void CreateEffect(Vector3 pos)

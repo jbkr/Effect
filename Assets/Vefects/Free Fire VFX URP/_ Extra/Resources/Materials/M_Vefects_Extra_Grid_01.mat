@@ -25,7 +25,7 @@ Material:
     m_TexEnvs:
     - _Texture:
         m_Texture: {fileID: 2800000, guid: 3f714c4a1943e8a49ab4cb3989a45290, type: 3}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: -5, y: -5}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
         m_Texture: {fileID: 0}

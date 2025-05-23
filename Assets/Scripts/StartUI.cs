@@ -3,8 +3,6 @@ using UnityEngine.UI;
 
 public class StartUI : UIBase
 {
-    private Button _button;
-
     [SerializeField]
     private Button startButton;
 
@@ -22,10 +20,4 @@ public class StartUI : UIBase
             startButton.onClick.AddListener(GameManager.Instance.OnClickStartButton);
         }
     }
-
-    private void OnClickStartButton()
-    {
-        Destroy(gameObject);
-    }
-
 }

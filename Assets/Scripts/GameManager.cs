@@ -25,11 +25,28 @@ public class GameManager : MonoSingleton<GameManager>
         _sceneLoadComplete = OnLobbyLoadComplete;
         LoadScene("LobbyScene");
     }
-
     private void OnLobbyLoadComplete()
     {
         UIManager.Instance.RemoveUI<StartUI>();
-        UIManager.Instance.CreateUI<StageUI>();
+        UIManager.Instance.CreateUI<LobbyUI>();
+
+        GameObject resGO = Resources.Load<GameObject>("Prefab/Player");
+        GameObject realGO = Instantiate(resGO);
+        realGO.transform.position = new Vector3(2, 0, 15);
+        //realGO.transform.Rotate(new Vector3(0, 210, 0));
+        realGO.transform.rotation = Quaternion.Euler(0, 210, 0);
+    }
+
+    public void OnClickFightButton()
+    {
+        _sceneLoadComplete = OnStageLoadComplete;
+        LoadScene("StageScene");
+    }
+
+    private void OnStageLoadComplete()
+    {
+        UIManager.Instance.RemoveUI<LobbyUI>();
+        //UIManager.Instance.CreateUI<StageUI>();
     }
 
     public void LoadScene(string sceneName)

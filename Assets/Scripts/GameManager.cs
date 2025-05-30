@@ -25,6 +25,7 @@ public class GameManager : MonoSingleton<GameManager>
         _sceneLoadComplete = OnLobbyLoadComplete;
         LoadScene("LobbyScene");
     }
+
     private void OnLobbyLoadComplete()
     {
         UIManager.Instance.RemoveUI<StartUI>();
@@ -46,7 +47,28 @@ public class GameManager : MonoSingleton<GameManager>
     private void OnStageLoadComplete()
     {
         UIManager.Instance.RemoveUI<LobbyUI>();
-        //UIManager.Instance.CreateUI<StageUI>();
+        UIManager.Instance.CreateUI<StageUI>();
+    }
+
+    public void OnClickStageButton()
+    {
+        _sceneLoadComplete = OnGameLoadComplete;
+        LoadScene("GameScene");
+    }
+
+    private void OnGameLoadComplete()
+    {
+        UIManager.Instance.RemoveUI<StageUI>();
+        UIManager.Instance.CreateUI<FightUI>();
+
+        GameObject playerRes = Resources.Load<GameObject>("Prefab/Player");
+        GameObject playerGO = Instantiate(playerRes);
+        playerGO.transform.position = new Vector3(-2, 0, -1.0f);
+        //_isPlay = true;
+
+        GameObject opponentRes = Resources.Load<GameObject>("Prefab/Opponent");
+        GameObject opponentGO = Instantiate(opponentRes);
+        opponentGO.transform.position = new Vector3(2, 0, -1.0f);
     }
 
     public void LoadScene(string sceneName)
@@ -80,27 +102,7 @@ public class GameManager : MonoSingleton<GameManager>
         //UIManager.Instance.CreateUI<ScoreUI>();
     }
 
-    public void OnClickStage1Button()
-    {
-        _sceneLoadComplete = OnGameLoadComplete;
-        LoadScene("GameScene");
-    }
-
-    private void OnGameLoadComplete()
-    {
-        UIManager.Instance.RemoveUI<StageUI>();
-        UIManager.Instance.CreateUI<FightUI>();
-
-        GameObject playerRes = Resources.Load<GameObject>("Prefab/Player");
-        GameObject playerGO = Instantiate(playerRes);
-        playerGO.transform.position = new Vector3(-2, 0, -1.0f);
-        //_isPlay = true;
-
-        GameObject opponentRes = Resources.Load<GameObject>("Prefab/Opponent");
-        GameObject opponentGO = Instantiate(opponentRes);
-        opponentGO.transform.position = new Vector3(2, 0, -1.0f);
-
-    }
+    
 
     public void CreateEffect(Vector3 pos)
     {

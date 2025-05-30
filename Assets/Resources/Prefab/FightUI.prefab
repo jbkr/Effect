@@ -85,7 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2163799548835418172}
   m_Layer: 5
-  m_Name: Player (1)
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -258,7 +258,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1399212817849664621}
   m_Layer: 5
-  m_Name: Opponent (1)
+  m_Name: Opponent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -381,6 +381,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0508655e9752d1e458886385b88d0b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Time: {fileID: 9062008931185993910}
+  playerHPBar: {fileID: 4292229436911486422}
+  opponentHPBar: {fileID: 8330824347185278731}
 --- !u!114 &2582019232612792307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -868,10 +871,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 87
+  m_text: 100
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d22b946ac8f84614891de8514c97ef22, type: 2}
+  m_sharedMaterial: {fileID: 1873728707300334955, guid: d22b946ac8f84614891de8514c97ef22, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1321,10 +1324,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 6879770585935832959, guid: 0f4f39901b919954789333870bac9863, type: 3}
-  m_Type: 0
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0

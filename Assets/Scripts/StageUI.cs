@@ -4,58 +4,33 @@ using UnityEngine.UI;
 public class StageUI : UIBase
 {
     [SerializeField]
-    private Button[] _stageButtons;
+    private CustomButton[] customButtons;
 
-    private int _selectedIndex = -1;
 
-    [SerializeField]
-    private Sprite normalButtonSprite;
-
-    [SerializeField]
-    private Sprite pressedButtonSprite;
+    private int currentIndex;
 
     void Start()
     {
-        for (int i = 0; i < _stageButtons.Length; i++)
+        for (int i = 0; i < customButtons.Length; i++)
         {
-            _stageButtons[i].onClick.AddListener(() =>
-            {
-                OnClickButton(i);
-            });
-        }
-
-        foreach (var button in _stageButtons)
-        {
-            if (button != null)
-            {
-                //stage1Button.onClick.AddListener(GameManager.Instance.OnClickStage1Button);
-                //button.onClick.AddListener(delegate { OnButtonPressed(button, buttons); });
-                button.onClick.AddListener(() => OnButtonPressed(button, _stageButtons));
-            }
+            customButtons[i].setIndex(i);
+            customButtons[i].onClick.AddListener(OnCustomButtonClicked);
+            customButtons[i].targetGraphic.color = new Color(1, 1, 1);
         }
     }
 
-    public void SelectStage(int selectedIndex)
+    public void setCurrentIndex(int index)
     {
-        Debug.Log("Stage index : " + selectedIndex);
+        currentIndex = index;
     }
 
-    private void OnClickButton(int index)
+    private void OnCustomButtonClicked()
     {
-        Debug.Log(index);
-    }
-
-    public void OnButtonPressed(Button _button, Button[] buttons)
-    {
-        Debug.Log("Button Pressed");
-        _button.image.sprite = pressedButtonSprite;
-
-        foreach (Button button in buttons)
+        for (int i = 0; i < customButtons.Length; i++)
         {
-            if (button != _button)
-            {
-                button.image.sprite = normalButtonSprite;
-            }
+            customButtons[i].targetGraphic.color = new Color(1, 1, 1);
         }
+        customButtons[currentIndex].targetGraphic.color = new Color(204f / 255f, 88f / 255f, 251f / 255f);
+        GameManager.Instance.OnClickStageButton();
     }
 }

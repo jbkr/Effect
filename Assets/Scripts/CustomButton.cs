@@ -3,16 +3,24 @@ using UnityEngine.UI;
 
 public class CustomButton : Button
 {
-    public int UIIndex;
-    public StageUI stageUI;
+    private StageUI stageUI;
+
+    private int index;
 
     protected override void Start()
     {
-        onClick.AddListener(OnClickCallback);
+        stageUI = GetComponentInParent<StageUI>();
+        onClick.AddListener(OnClick);
     }
 
-    private void OnClickCallback()
+    private void OnClick()
     {
-        //stageUI.
+        stageUI.setCurrentIndex(index);
+        Debug.Log("current index : " + index);
+    }
+
+    public void setIndex(int index)
+    {
+        this.index = index;
     }
 }

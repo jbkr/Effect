@@ -26,12 +26,12 @@ public class FightUI : UIBase
     {
         ShowRoundTime();
 
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.Z))
         {
             playerHPBar.value -= 0.1f;
         }
 
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.X))
         {
             opponentHPBar.value -= 0.1f;
         }

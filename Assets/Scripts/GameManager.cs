@@ -15,6 +15,8 @@ public class GameManager : MonoSingleton<GameManager>
 
     private Action _sceneLoadComplete;
 
+    private Player _player;
+
     void Start()
     {
 
@@ -64,11 +66,17 @@ public class GameManager : MonoSingleton<GameManager>
         GameObject playerRes = Resources.Load<GameObject>("Prefab/Player");
         GameObject playerGO = Instantiate(playerRes);
         playerGO.transform.position = new Vector3(-2, 0, -1.0f);
+        _player = playerGO.GetComponent<Player>();
         //_isPlay = true;
 
         GameObject opponentRes = Resources.Load<GameObject>("Prefab/Opponent");
         GameObject opponentGO = Instantiate(opponentRes);
         opponentGO.transform.position = new Vector3(2, 0, -1.0f);
+    }
+
+    private void Update()
+    {
+        
     }
 
     public void LoadScene(string sceneName)
@@ -102,7 +110,7 @@ public class GameManager : MonoSingleton<GameManager>
         //UIManager.Instance.CreateUI<ScoreUI>();
     }
 
-    
+
 
     public void CreateEffect(Vector3 pos)
     {

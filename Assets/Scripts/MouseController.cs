@@ -2,60 +2,35 @@ using UnityEngine;
 
 public class MouseController : MonoBehaviour
 {
+    private Agent agent;
+    private Ray ray;
+    private RaycastHit hitInfo;
 
-
-    private bool isPlayerSelected;
-    private Agent currentAgent;
-    private bool isMove;
-    private Vector3 destination;
-
-    void Start()
-    {
-
-    }
     void Update()
-
     {
-        //if(Input.GetMouseButtonDown(0))
-        //{
-        //    //Input.GetTouch()
-        //    //Ray hit;
-
-
-        //}
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Input.GetMouseButtonDown(0)) // 0 = left mouse button
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
             //int layer = LayerMask.NameToLayer("Agent");
-
-            RaycastHit hitInfo;
-
             //bool ishit = Physics.Raycast(ray, out hitInfo, float.MaxValue, 1 << 6);
             if (Physics.Raycast(ray, out hitInfo, float.MaxValue, 1 << 6))
             {
-                Debug.Log("is Hit Plane : " + hitInfo.point);
-
-                currentAgent = hitInfo.collider.gameObject.GetComponent<Agent>();
-
-                isPlayerSelected = true;
-            }
-
-            RaycastHit planeHit;
-
-            if (isPlayerSelected && Physics.Raycast(ray, out planeHit, float.MaxValue, 1 << 7))
-            {
-                isMove = true;
-                Debug.Log(planeHit.point);
-                destination = planeHit.point;
+                agent = hitInfo.collider.gameObject.GetComponent<Agent>();
             }
 
         }
 
-        if (isMove)
+        if (Input.GetMouseButtonDown(1))
         {
-            isMove = currentAgent.MoveToDestination(destination);
+            if (Physics.Raycast(ray, out hitInfo, float.MaxValue, 1 << 7))
+            {
+                if (agent == null)
+                {
+                    return;
+                }
+                agent.SetDestination(hitInfo.point);
+            }
         }
     }
 }

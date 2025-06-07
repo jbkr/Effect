@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1464694590321200776}
   - component: {fileID: 5569740198797164055}
   - component: {fileID: 8197007189798625890}
+  - component: {fileID: 7877401450355785467}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -63,12 +64,25 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5208322965302502625}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7513d037af13df844bdb4ea5e093ca8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 5569740198797164055}
+  speed: 1
+--- !u!114 &7877401450355785467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5208322965302502625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dff1a5c50a59ebc4c9d63c582beee789, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   speed: 1
 --- !u!1001 &2112224718503643367
 PrefabInstance:
@@ -116,6 +130,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2836004475591197023, guid: f432554f564e69242897607d34218939, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836004475591695665, guid: f432554f564e69242897607d34218939, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2836004475591695743, guid: f432554f564e69242897607d34218939, type: 3}

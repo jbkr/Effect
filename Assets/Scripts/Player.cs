@@ -24,17 +24,43 @@ public class Player : MonoBehaviour
 
     //[SerializeField]
     //private CharacterController characterController;
+    private Transform playerTransform;
+
+    public Transform GetTransform()
+    {
+        return playerTransform;
+    }
+
+    bool isJump = false;
 
     void Update()
     {
+        playerTransform = transform;
+        //Debug.Log("Player Position : " + transform.position);
+
         bool isMoving = false;
 
-        if (Input.GetKey(KeyCode.W) && isAttack == false)
+        if (Input.GetKeyDown(KeyCode.W) && isAttack == false)
         {
             //characterController.Move(Vector3.forward * Time.deltaTime * speed);
-            transform.position += Vector3.forward * Time.deltaTime * speed;
-            transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+            //transform.position += Vector3.forward * Time.deltaTime * speed;
+            //transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
             isMoving = true;
+            isJump = true;
+            animator.Play("JUMP");
+        }
+        if (isJump)
+        {
+            AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+            if (animatorStateInfo.IsName("JUMP") && animatorStateInfo.normalizedTime >= 1f)
+            {
+                if (animatorStateInfo.IsName("LAND") && animatorStateInfo.normalizedTime >= 1f)
+                {
+                    isJump = false;
+                }
+            }
+
         }
         if (Input.GetKey(KeyCode.S) && isAttack == false)
         {
@@ -47,8 +73,11 @@ public class Player : MonoBehaviour
         {
             transform.position += Vector3.left * Time.deltaTime * speed;
             //characterController.Move(Vector3.left * Time.deltaTime * speed);
-            transform.rotation = Quaternion.Euler(new Vector3(0, 270, 0));
+            transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
             isMoving = true;
+
+            if (!isJump)
+                animator.Play("BACKWARD");
         }
         if (Input.GetKey(KeyCode.D) && isAttack == false)
         {
@@ -56,6 +85,7 @@ public class Player : MonoBehaviour
             //characterController.Move(Vector3.right * Time.deltaTime * speed);
             transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
             isMoving = true;
+            animator.Play("FORWARD");
         }
 
         if (Input.GetMouseButtonDown(0) && !isAttack)
@@ -74,13 +104,11 @@ public class Player : MonoBehaviour
             }
         }
 
-
-
-        if (isMoving)
-        {
-            animator.Play("RUN");
-        }
-        if (isMoving == false && isAttack == false)
+        //if (isMoving)
+        //{
+        //    animator.Play("RUN");
+        //}
+        if (!isMoving && !isAttack && !isJump)
         {
             animator.Play("IDLE");
         }

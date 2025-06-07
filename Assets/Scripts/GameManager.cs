@@ -17,6 +17,11 @@ public class GameManager : MonoSingleton<GameManager>
 
     private Player _player;
 
+    public Transform GetPlayerTransform()
+    {
+        return _player.GetTransform();
+    }
+
     void Start()
     {
 
@@ -76,7 +81,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void Update()
     {
-        
+
     }
 
     public void LoadScene(string sceneName)

@@ -69,8 +69,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 9152524729768624243}
-  speed: 1
-  player: {fileID: 8197007189798625890, guid: 373a4cf588a33b44bb39618644a3db2b, type: 3}
+  speed: 0.5
 --- !u!1001 &7797773925176364946
 PrefabInstance:
   m_ObjectHideFlags: 0

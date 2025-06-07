@@ -1,160 +1,144 @@
 using UnityEngine;
+using UnityEngine.Playables;
+
 
 public class Opponent : MonoBehaviour
 {
     [SerializeField]
     private Animator animator;
-
-    //[SerializeField]
-    //private AudioSource audioSource;
-
     public float speed = 1.0f;
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("OnCollisionEnter");
-    }
-
-    [SerializeField]
-    private Player player;
-
-    void Start()
-    {
-        animator.Play("IDLE");
-        isMoving = true;
-    }
-
+    private PlayerState opponentState;
     private bool isAttack = false;
-
-    private bool isClose;
     private float distance;
     private float chasingDistance = 3.5f;
     private float attackDistance = 2.0f;
     private bool isChasing;
-    private bool isMoving;
     private bool isFinished;
     private Transform playerTransform;
 
+    void Start()
+    {
+        opponentState = PlayerState.IDLE;
+    }
+
     void Update()
     {
-        playerTransform = player.transform;
+        HandleInput();
+
+        PlayAnimation();
+    }
+
+    private void HandleInput1()
+    {
+        opponentState = PlayerState.IDLE;
+
+        playerTransform = GameManager.Instance.GetPlayerTransform();
+        distance = Vector3.Distance(transform.position, playerTransform.position);
+
+        if (distance < chasingDistance)
+        {
+            opponentState = PlayerState.FORWARD;
+        }
+        if (distance < attackDistance)
+        {
+            opponentState = PlayerState.ATTACK;
+        }
+    }
+
+    private void PlayAnimation()
+    {
+        switch (opponentState)
+        {
+            case PlayerState.IDLE:
+                animator.Play("IDLE");
+                break;
+            case PlayerState.FORWARD:
+                animator.Play("FORWARD");
+                Vector3 direction = playerTransform.position - transform.position;
+                direction = direction.normalized;
+                transform.position += direction * speed * Time.deltaTime;
+                break;
+            case PlayerState.BACKWARD:
+                animator.Play("BACKWARD");
+                break;
+            case PlayerState.ATTACK:
+                {
+                    animator.Play("ATTACK");
+                    AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+                    if (animatorStateInfo.IsName("ATTACK") && animatorStateInfo.normalizedTime >= 1f)
+                    {
+                        isAttack = false;
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private void HandleInput()
+    {
+        if (!isAttack && !isChasing)
+        {
+            opponentState = PlayerState.IDLE;
+        }
+
         playerTransform = GameManager.Instance.GetPlayerTransform();
         distance = Vector3.Distance(transform.position, playerTransform.position);
         Debug.Log("Player Position : " + playerTransform.position);
 
-        if (distance <= chasingDistance && isMoving)
+        if (distance > chasingDistance)
+        {
+            isChasing = false;
+        }
+
+        if (distance <= chasingDistance && distance >= attackDistance)
         {
             isChasing = true;
         }
 
         if (isChasing)
         {
-            Vector3 direction = player.transform.position - transform.position;
+            Vector3 direction = playerTransform.position - transform.position;
             direction = direction.normalized;
             transform.position += direction * speed * Time.deltaTime;
+            opponentState = PlayerState.FORWARD;
         }
 
-        Debug.Log("isAttack : " + isAttack);
-
-        if (distance <= attackDistance && !isAttack && !isFinished)
+        if (distance <= attackDistance)
         {
-            isMoving = false;
             isChasing = false;
-
             isAttack = true;
-            animator.Play("ATTACK");
+            opponentState = PlayerState.ATTACK;
         }
-
-
-        if (isAttack)
-        {
-            AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
-
-            if (animatorStateInfo.IsName("ATTACK") && animatorStateInfo.normalizedTime >= 1f)
-            {
-                isAttack = false;
-                isFinished = true;
-            }
-        }
-
-        if (isChasing)
-        {
-            animator.Play("RUN");
-        }
-
-        if (!isChasing && !isAttack && isFinished)
-        {
-            animator.Play("IDLE");
-        }
-
-
-
-        //if (isAttack)
-        //{
-        //    AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
-
-        //    if (animatorStateInfo.IsName("ATTACK") && animatorStateInfo.normalizedTime >= 1f)
-        //    {
-        //        //isAttack = false;
-        //    }
-        //}
-        //bool isMoving = false;
-
-        //if (Input.GetKey(KeyCode.W) && isAttack == false)
-        //{
-        //    //characterController.Move(Vector3.forward * Time.deltaTime * speed);
-        //    transform.position += Vector3.forward * Time.deltaTime * speed;
-        //    transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-        //    isMoving = true;
-        //}
-        //if (Input.GetKey(KeyCode.S) && isAttack == false)
-        //{
-        //    transform.position += Vector3.back * Time.deltaTime * speed;
-        //    //characterController.Move(Vector3.back * Time.deltaTime * speed);
-        //    transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
-        //    isMoving = true;
-        //}
-        //if (Input.GetKey(KeyCode.A) && isAttack == false)
-        //{
-        //    transform.position += Vector3.left * Time.deltaTime * speed;
-        //    //characterController.Move(Vector3.left * Time.deltaTime * speed);
-        //    transform.rotation = Quaternion.Euler(new Vector3(0, 270, 0));
-        //    isMoving = true;
-        //}
-        //if (Input.GetKey(KeyCode.D) && isAttack == false)
-        //{
-        //    transform.position += Vector3.right * Time.deltaTime * speed;
-        //    //characterController.Move(Vector3.right * Time.deltaTime * speed);
-        //    transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
-        //    isMoving = true;
-        //}
-
-        //if (Input.GetMouseButtonDown(0) && !isAttack)
-        //{
-        //    isAttack = true;
-        //    animator.Play("ATTACK");
-        //}
-
-        //if (isAttack)
-        //{
-        //    AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
-
-        //    if (animatorStateInfo.IsName("ATTACK") && animatorStateInfo.normalizedTime >= 1f)
-        //    {
-        //        isAttack = false;
-        //    }
-        //}
-
-
-
-        //if (isMoving)
-        //{
-        //    animator.Play("RUN");
-        //}
-        //if (isMoving == false && isAttack == false)
-        //{
-        //    animator.Play("IDLE");
-        //}
-
     }
+
+
 }

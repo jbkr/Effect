@@ -17,14 +17,19 @@ public class GameManager : MonoSingleton<GameManager>
 
     private Player _player;
 
-    public Transform GetPlayerTransform()
+    public Player GetPlayer()
     {
-        return _player.GetTransform();
+        return _player;
     }
 
     void Start()
     {
 
+    }
+
+    public void OnPlayerHit()
+    {
+        UIManager.Instance.PlayerHPDown();
     }
 
     public void OnClickStartButton()

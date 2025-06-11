@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem;
 
 public enum PlayerState
 {
-    IDLE, FORWARD, BACKWARD, ATTACK
+    IDLE, FORWARD, BACKWARD, ATTACK, HITTED
 }
 
 public class Player : MonoBehaviour
@@ -11,35 +10,40 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Animator animator;
 
-    public float speed = 1.0f;
+    [SerializeField]
+    private Opponent opponent;
 
+    public float speed = 1.0f;
     private PlayerState playerState;
 
-    private Transform playerTransform;
-
-    private bool isMoving;
-
-    private bool isAttack;
-
-    public Transform GetTransform()
-    {
-        return playerTransform;
-    }
     void Start()
     {
         playerState = PlayerState.IDLE;
     }
+
     void Update()
     {
-        playerTransform = transform;
-
         HandleInput();
-
         PlayAnimation();
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other is BoxCollider)
+        {
+            Debug.Log("Hit");
+
+            GameManager.Instance.OnPlayerHit();
+        }
+
+
+    }
+
+
+
     private void HandleInput()
     {
-        if (playerState != PlayerState.ATTACK)
+        if (playerState != PlayerState.ATTACK && playerState != PlayerState.HITTED)
         {
             playerState = PlayerState.IDLE;
 
@@ -53,13 +57,10 @@ public class Player : MonoBehaviour
             }
             if (Input.GetMouseButtonDown(0))
             {
-                isAttack = true;
                 playerState = PlayerState.ATTACK;
             }
         }
     }
-
-
     private void PlayAnimation()
     {
         switch (playerState)
@@ -72,7 +73,7 @@ public class Player : MonoBehaviour
                     transform.position += Vector3.right * Time.deltaTime * speed;
                     transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
                     animator.Play("FORWARD");
-                    playerState = PlayerState.IDLE;
+                    //playerState = PlayerState.IDLE;
                 }
                 break;
             case PlayerState.BACKWARD:
@@ -80,7 +81,7 @@ public class Player : MonoBehaviour
                     transform.position += Vector3.left * Time.deltaTime * speed;
                     transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
                     animator.Play("BACKWARD");
-                    playerState = PlayerState.IDLE;
+                    //playerState = PlayerState.IDLE;
                 }
                 break;
             case PlayerState.ATTACK:
@@ -94,10 +95,25 @@ public class Player : MonoBehaviour
                     }
                 }
                 break;
+            case PlayerState.HITTED:
+                {
+                    transform.position += Vector3.left * Time.deltaTime * speed * 1.5f;
+
+                    animator.Play("HITTED");
+                    AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+                    if (animatorStateInfo.IsName("HITTED") && animatorStateInfo.normalizedTime >= 1f)
+                    {
+                        playerState = PlayerState.IDLE;
+                    }
+                }
+                break;
             default:
                 break;
         }
     }
-
-
+    public void SetState(PlayerState state)
+    {
+        this.playerState = state;
+    }
 }

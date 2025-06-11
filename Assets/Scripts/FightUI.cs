@@ -15,6 +15,11 @@ public class FightUI : UIBase
     [SerializeField]
     private Slider opponentHPBar;
 
+    public void PlayerDamaged()
+    {
+        playerHPBar.value -= 0.2f;
+    }
+
     void Start()
     {
         startTime = 100;

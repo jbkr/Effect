@@ -1,8 +1,5 @@
 using System.Collections.Generic;
-using System.Xml.Linq;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
-using UnityEngine.UI;
 
 public class UIBase : MonoBehaviour { }
 
@@ -77,5 +74,10 @@ public class UIManager : MonoBehaviour
     public void AddScore()
     {
         //GetUI<ScoreUI>().ChangeScore(20000);
+    }
+
+    public void PlayerHPDown()
+    {
+        GetUI<FightUI>().PlayerDamaged();
     }
 }

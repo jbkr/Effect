@@ -17,7 +17,7 @@ public class FightUI : UIBase
 
     public void PlayerDamaged()
     {
-        playerHPBar.value -= 0.2f;
+        playerHPBar.value -= 0.5f;
     }
 
     void Start()

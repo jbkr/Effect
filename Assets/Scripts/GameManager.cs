@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class GameManager : MonoSingleton<GameManager>
 {
@@ -15,11 +12,18 @@ public class GameManager : MonoSingleton<GameManager>
 
     private Action _sceneLoadComplete;
 
-    private Player _player;
+    private Enemy1 _player;
 
-    public Player GetPlayer()
+    private Opponent _opponent;
+
+    public Enemy1 GetPlayer()
     {
         return _player;
+    }
+
+    public Opponent GetOpponent()
+    {
+        return _opponent;
     }
 
     void Start()
@@ -30,6 +34,24 @@ public class GameManager : MonoSingleton<GameManager>
     public void OnPlayerHit()
     {
         UIManager.Instance.PlayerHPDown();
+    }
+
+    public void PlayerLose()
+    {
+        UIManager.Instance.CreateUI<LoseUI>();
+        GetPlayer().SetPlayable(false);
+
+        StartCoroutine(StartMainMenu());
+    }
+
+    public IEnumerator StartMainMenu()
+    {
+        Debug.Log("Start waiting...");
+        yield return new WaitForSeconds(3); // Waits for 3 seconds
+        Debug.Log("3 seconds later!");
+        UIManager.Instance.RemoveUI<LoseUI>();
+        UIManager.Instance.RemoveUI<FightUI>();
+        yield return SceneManager.LoadSceneAsync("StartScene");
     }
 
     public void OnClickStartButton()
@@ -46,8 +68,9 @@ public class GameManager : MonoSingleton<GameManager>
         GameObject resGO = Resources.Load<GameObject>("Prefab/Player");
         GameObject realGO = Instantiate(resGO);
         realGO.transform.position = new Vector3(2, 0, 15);
-        //realGO.transform.Rotate(new Vector3(0, 210, 0));
         realGO.transform.rotation = Quaternion.Euler(0, 210, 0);
+
+        realGO.GetComponent<Enemy1>().SetPlayable(false);
     }
 
     public void OnClickFightButton()
@@ -76,18 +99,18 @@ public class GameManager : MonoSingleton<GameManager>
         GameObject playerRes = Resources.Load<GameObject>("Prefab/Player");
         GameObject playerGO = Instantiate(playerRes);
         playerGO.transform.position = new Vector3(-2, 0, -1.0f);
-        _player = playerGO.GetComponent<Player>();
+        _player = playerGO.GetComponent<Enemy1>();
         //_isPlay = true;
+
+        _player.SetPlayable(true);
 
         GameObject opponentRes = Resources.Load<GameObject>("Prefab/Opponent");
         GameObject opponentGO = Instantiate(opponentRes);
+        _opponent = opponentGO.GetComponent<Opponent>();
         opponentGO.transform.position = new Vector3(2, 0, -1.0f);
     }
 
-    private void Update()
-    {
 
-    }
 
     public void LoadScene(string sceneName)
     {

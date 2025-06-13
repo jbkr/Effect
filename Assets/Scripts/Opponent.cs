@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Opponent : MonoBehaviour
@@ -10,7 +11,12 @@ public class Opponent : MonoBehaviour
     private float distance;
     private float chasingDistance = 2.5f;
     private float attackDistance = 1.5f;
-    private Player player;
+    private Enemy1 player;
+
+    public PlayerState GetOpponentState()
+    {
+        return opponentState;
+    }
 
     //[SerializeField]
     //private Player player;
@@ -18,6 +24,7 @@ public class Opponent : MonoBehaviour
     void Start()
     {
         opponentState = PlayerState.IDLE;
+        isAttackable = true;
     }
 
     void Update()
@@ -26,22 +33,27 @@ public class Opponent : MonoBehaviour
         PlayAnimation();
     }
 
+    private bool isAttackable;
+
     private void HandleInput()
     {
         if (opponentState != PlayerState.ATTACK)
         {
             opponentState = PlayerState.IDLE;
 
-            player = GameManager.Instance.GetPlayer();
-            distance = Vector3.Distance(transform.position, player.transform.position);
+            if (isAttackable)
+            {
+                player = GameManager.Instance.GetPlayer();
+                distance = Vector3.Distance(transform.position, player.transform.position);
 
-            if (distance < chasingDistance)
-            {
-                opponentState = PlayerState.FORWARD;
-            }
-            if (distance < attackDistance)
-            {
-                opponentState = PlayerState.ATTACK;
+                if (distance < chasingDistance)
+                {
+                    opponentState = PlayerState.FORWARD;
+                }
+                if (distance < attackDistance)
+                {
+                    opponentState = PlayerState.ATTACK;
+                }
             }
         }
     }
@@ -75,12 +87,21 @@ public class Opponent : MonoBehaviour
                     }
                     if (animatorStateInfo.IsName("ATTACK") && animatorStateInfo.normalizedTime >= 1.0f)
                     {
+                        player.SetIsHitted(false);
                         opponentState = PlayerState.IDLE;
+                        isAttackable = false;
+                        StartCoroutine(CoolTime());
                     }
                 }
                 break;
             default:
                 break;
         }
+    }
+
+    private IEnumerator CoolTime()
+    {
+        yield return new WaitForSeconds(3.0f);
+        isAttackable = true;
     }
 }

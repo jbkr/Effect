@@ -131,6 +131,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Opponent
       objectReference: {fileID: 0}
+    - target: {fileID: 8303356537387177457, guid: 90fba0c9b1905024abcb89d6605d534d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9083036488039510466, guid: 90fba0c9b1905024abcb89d6605d534d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3
@@ -583,6 +587,10 @@ PrefabInstance:
     - target: {fileID: 3589124843595732404, guid: b540749139b015b4f95c9e244533371a, type: 3}
       propertyPath: m_Name
       value: FightUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 3589124843595732404, guid: b540749139b015b4f95c9e244533371a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4267732347396377002, guid: b540749139b015b4f95c9e244533371a, type: 3}
       propertyPath: m_Pivot.x

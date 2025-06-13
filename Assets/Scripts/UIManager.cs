@@ -25,8 +25,12 @@ public class UIManager : MonoBehaviour
     public static void Initialize()
     {
         UIManager res = Resources.Load<UIManager>("Prefab/UIManager");
-        _instance = Instantiate(res);
-        DontDestroyOnLoad(_instance.gameObject);
+
+        if (_instance == null)
+        {
+            _instance = Instantiate(res);
+            DontDestroyOnLoad(_instance.gameObject);
+        }
     }
 
     public void CreateUI<T>() where T : UIBase
